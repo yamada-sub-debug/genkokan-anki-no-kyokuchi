@@ -218,6 +218,27 @@
       opacity: 0.8;
     }
 
+    .logo {
+      position: static;
+      top: 20px;
+      right: 28px;
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+
+      /* 背景グラデーション */
+      background: linear-gradient(135deg, #A855F7, #6366F1, #0EA5E9);
+
+      /* 🍂を白で表示 */
+      color: #fff;
+      font-size: 22px;
+
+      /* 影・立体感 */
+      box-shadow: 0 2px 8px rgba(99,102,241,0.35);
+      user-select: none;
+    }
 
   </style>
 </head>
@@ -670,17 +691,13 @@
     // 教科ごとのラベル設定
     function getLabelsForSubject(subject) {
       switch (subject) {
-        case '漢字':       return ['書き', '意味'];
-        case '現代文単語': return ['読み', '意味'];
-        case '古典文法':   return ['用法', '意味'];
-        case '古典単語':   return ['読み', '意味'];
-        case '古典常識':   return ['読み', '意味'];
-        case '漢文句法':   return ['書き下し', '意味'];
-        case '漢文語彙':   return ['書き下し', '意味'];
-        case '漢文常識':   return ['読み', '意味'];
-        default:           return ['解答1', '解答2'];
+        case '英単語': return ['意味', '品詞'];  // meaning / part of speech
+        case '英熟語': return ['意味', '例'];    // idiom meaning / example
+        case '英文法': return ['用法', '例'];    // usage / example
+        default:       return ['解答1', '解答2'];
       }
     }
+
 
     // field1 / field2 をラベル付きペアで返す
     function getAnswerPairs(row) {
@@ -832,9 +849,9 @@
       const pct = `${(Math.max(0, Math.min(1, progress)) * 100).toFixed(1)}%`;
 
       // ---- Cyber Neon（視認性チューニング済み） ----
-      const startColor = '#0d9488';   // ティール（左）
-      const midColor   = '#2563eb';   // ブルー（中）
-      const endColor   = '#7c3aed';   // パープル（右）
+      const startColor = '#A855F7';  // バイオレット（左）
+      const midColor   = '#6366F1';  // ネオンパープル（中）
+      const endColor   = '#0EA5E9';  // ネオンブルー（右）
 
       // 期日行
       const dueLine = rec
@@ -1120,4 +1137,3 @@
 
 </body>
 </html>
-
