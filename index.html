@@ -691,9 +691,14 @@
     // 教科ごとのラベル設定
     function getLabelsForSubject(subject) {
       switch (subject) {
-        case '英単語': return ['意味', '品詞'];  // meaning / part of speech
-        case '英熟語': return ['意味', '例'];    // idiom meaning / example
-        case '英文法': return ['用法', '例'];    // usage / example
+        case '漢字':       return ['書き', '意味'];
+        case '現代文単語': return ['読み', '意味'];
+        case '古典文法':   return ['読み', '意味'];
+        case '古典単語':   return ['読み', '意味'];
+        case '古典常識':   return ['読み', '意味'];
+        case '漢文句法':   return ['書き下し', '意味'];
+        case '漢文語彙':   return ['書き下し', '意味'];
+        case '漢文常識':   return ['読み', '意味'];
         default:       return ['解答1', '解答2'];
       }
     }
