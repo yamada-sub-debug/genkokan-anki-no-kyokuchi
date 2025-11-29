@@ -7,21 +7,20 @@
   <meta name="theme-color" content="#0f172a" />
   <style>
     :root {
-      --bg: #0b1020;           /* 深い群青の背景 */
+      --bg: #0b1020;
       --card: rgba(255,255,255,.06);
       --stroke: rgba(255,255,255,.12);
-      --text: #f8fafc;         /* ほぼ白 */
-      --muted: #cbd5e1;        /* 薄めの文字 */
-      --accent: #60a5fa;       /* アクセント（青） */
-      --accent-2: #a78bfa;     /* アクセント（紫） */
+      --text: #f8fafc;
+      --muted: #cbd5e1;
+      --accent: #60a5fa;
+      --accent-2: #a78bfa;
       --shadow: 0 8px 24px rgba(0,0,0,.35);
       --radius-xl: 20px;
       --radius-lg: 14px;
       --radius-md: 10px;
-      --tap: 56px;             /* 親指タップの最小高さ */
+      --tap: 56px;
     }
 
-    /* ✨ 背景を固定して境目をなくす */
     html {
       background: var(--bg);
     }
@@ -37,7 +36,6 @@
       letter-spacing: .2px;
     }
 
-    /* グラデーションをスクロール固定のレイヤーで描画 */
     body::before {
       content: "";
       position: fixed;
@@ -52,7 +50,6 @@
       background-attachment: fixed;
     }
 
-    /* ---- トップバー ---- */
     header {
       position: sticky;
       top: 0; left: 0; right: 0;
@@ -84,7 +81,6 @@
     .brand h1 { font-size: 16px; margin: 0; font-weight: 700; }
     .brand .sub { font-size: 12px; color: var(--muted); }
 
-    /* ボタントレイ */
     .tray {
       display: grid;
       grid-auto-flow: column;
@@ -119,13 +115,12 @@
       border-color: rgba(148,163,184,.6);
     }
 
-    /* ---- メイン ---- */
     main {
       max-width: 900px; margin: 16px auto; padding: 0 14px 24px;
     }
 
     .stage {
-      border: 1px dashed var(--stroke);
+      border: 1px solid var(--stroke);
       border-radius: var(--radius-xl);
       background: rgba(255,255,255,.02);
       min-height: calc(100dvh - 160px);
@@ -138,12 +133,10 @@
     .empty h2 { font-size: 20px; margin: 0 0 8px; font-weight: 800; }
     .empty p { margin: 0; font-size: 14px; }
 
-    /* 小さめ端末で余白と高さ調整 */
     @media (max-width: 380px) {
       .pill { height: 48px; padding: 0 14px; font-size: 14px; }
       .stage { min-height: calc(100dvh - 150px); }
     }
-    /* DEV: 右下フローティング管理パネル */
     #dev-fab { 
       position: fixed; right: 14px; bottom: 14px; z-index: 50;
       width: 56px; height: 56px; border-radius: 9999px;
@@ -166,26 +159,23 @@
     #dev-panel .mini { padding: 8px 10px; height: auto; font-size: 13px; }
     #dev-panel .warn { margin-top: 6px; font-size:12px; color: #fca5a5; }
 
-    /* 切り取り式ゲージ用の共通スタイル */
     .unit-card{
       position: relative;
-      overflow: hidden;                 /* ← はみ出しを物理的に切り取る */
-      background: var(--card);          /* 未達部分の地色 */
+      overflow: hidden;
+      background: var(--card);
       border-radius: 16px;
     }
 
-    /* 下地：フル幅グラデーション。幅そのものを --pct にする＝見えてる帯だけ */
     .unit-card::before{
       content:"";
       position:absolute;
       left:0; top:0; bottom:0;
-      width: var(--pct, 0%);            /* ← 進捗 */
+      width: var(--pct, 0%);
       background: linear-gradient(90deg, var(--grad-start), var(--grad-mid), var(--grad-end));
       transition: width .35s ease;
       z-index:0;
     }
 
-    /* 右端のサブピクセルにじみ対策（1pxマスク） */
     .unit-card::after{
       content:"";
       position:absolute;
@@ -196,11 +186,9 @@
       z-index:0;
     }
 
-    /* 中身は帯の上に載せる */
     .unit-card > .uc-content{
       position: relative;
       z-index: 1;
-      /* 読みやすさアップ（白/--mutedの視認性） */
       text-shadow: 0 1px 3px rgba(0,0,0,.6);
     }
 
@@ -218,26 +206,14 @@
       opacity: 0.8;
     }
 
-    .logo {
-      position: static;
-      top: 20px;
-      right: 28px;
-      width: 40px;
-      height: 40px;
-      display: grid;
-      place-items: center;
-      border-radius: 10px;
-
-      /* 背景グラデーション */
-      background: linear-gradient(135deg, #A855F7, #6366F1, #0EA5E9);
-
-      /* 🍂を白で表示 */
-      color: #fff;
-      font-size: 22px;
-
-      /* 影・立体感 */
-      box-shadow: 0 2px 8px rgba(99,102,241,0.35);
-      user-select: none;
+    #addUnit {
+      display: none;
+    }
+    
+    @media (min-width: 768px) {
+      #addUnit {
+        display: inline-flex;
+      }
     }
 
   </style>
@@ -250,16 +226,11 @@
         <div style="flex:1;">
           <h1>現古漢暗記の極致</h1>
         </div>
-      <button id="settings-btn" aria-label="設定"
-        onclick="(()=>{const p=document.getElementById('settings-panel');if(!p)return;const cur=getComputedStyle(p).display;p.style.display=(cur==='none')?'block':'none';})();">
-        🛠️
-      </button>
-
+      <button id="settings-btn" aria-label="設定">🛠️</button>
       </div>
 
-      <!-- 7つのボタン（ホーム＋教科） -->
       <nav class="tray" id="subjectTray" aria-label="科目ナビゲーション">
-        <button class="pill" data-key="home" data-active="true">ホーム</button>
+        <button class="pill" data-key="home" data-active="true">🏠</button>
         <button class="pill" data-key="漢字">漢字</button>
         <button class="pill" data-key="現代文単語">現代文単語</button>
         <button class="pill" data-key="古典文法">古典文法</button>
@@ -279,7 +250,6 @@
     </section>
   </main>
 
-  <!-- ▼ 設定パネル -->
   <div id="settings-panel" style="
     display:none;
     position:fixed;
@@ -295,40 +265,33 @@
   ">
     <h4 style="margin:0 0 10px;">設定</h4>
 
-    <!-- JSON読み込み -->
     <label for="jsonFile" class="pill pill--primary">DB読み込み</label>
-    <input id="jsonFile" type="file" accept="application/json" style="display:none">
+    <input id="jsonFile" type="file" accept="application/json" multiple style="display:none">
 
-    <!-- DB全消去 -->
     <button id="clearDb" class="pill pill--danger">DB全消去</button>
 
-    <!-- 学習履歴リセット -->
     <button id="reset-btn" class="pill pill--primary">学習履歴をリセット</button>
 
   </div>
 
-
-  <!-- ▼▼ ここにアップロード済みJSON（配列）をそのまま貼り付ける ▼▼ -->
-  <script type="application/json" id="seed-data">
-  </script>
-  <!-- ▲▲ 本番では配列全体に置き換えてください ▲▲ -->
     <script>
-    // ---- JSON読み込み（HTML内にそのまま同梱） ----
 
     let DATA = []; 
+    let unitCreatorRows = null;
 
-    // ---- 状態管理 ----
+    const APP_NS = 'kokugo';
+
     const state = {
-      subject: "home",  // 'home' | 科目名
-      unit: null,        // 単元名（null=未選択）
-      mode: "idle",     // 'idle' | 'quiz'
-      order: [],         // 出題順（インデックスの配列）
-      index: 0,          // 何問目か
+      subject: "home",
+      unit: null,
+      mode: "idle",
+      order: [],
+      index: 0,
       showAnswer: false,
       correct: 0,
-      // ▼ 追加：不正解復習用
-      pool: null,      // null=通常。配列=この配列だけ出題（ミス復習など）
-      wrong: [],       // その回で間違えた問題を保持（重複なし）
+      pool: null,
+      wrong: [],
+      view: "main",
     };
 
     const tray = document.getElementById("subjectTray");
@@ -343,6 +306,10 @@
       tray.querySelectorAll('.pill').forEach(p => p.setAttribute('data-active', 'false'));
       btn.setAttribute('data-active', 'true');
 
+      state.view = 'main';
+      const legacy = document.getElementById('settings-panel');
+      if (legacy) legacy.style.display = 'none';
+
       state.subject = key;
       state.unit = null;
       state.mode = 'idle';
@@ -354,7 +321,6 @@
     });
 
     function getItems() {
-      // ▼ 追加：pool があるときは pool を優先（「ミスだけ復習」用）
       if (Array.isArray(state.pool) && state.pool.length) return state.pool;
 
       let items = state.subject === 'home' ? DATA : DATA.filter(x => x.教材 === state.subject);
@@ -369,7 +335,6 @@
       if (row.id != null) {
         if (!state.wrong.some(x => x.id === row.id)) state.wrong.push(row);
       } else {
-        // id が無いときの簡易判定（fields 同一で判定）
         const key = JSON.stringify(row.fields || {});
         if (!state.wrong.some(x => JSON.stringify(x.fields || {}) === key)) state.wrong.push(row);
       }
@@ -386,7 +351,6 @@
     function startQuiz(unitKey = null) {
       if (unitKey !== null) state.unit = unitKey;
 
-      // ▼ 追加：通常出題に戻し、ミス履歴をクリア
       state.pool = null;
       state.wrong = [];
 
@@ -401,7 +365,7 @@
         return;
       }
 
-      state.order = shuffle(Array.from({ length: items.length }, (_, i) => i)); // 常にランダム
+      state.order = shuffle(Array.from({ length: items.length }, (_, i) => i));
       state.index = 0;
       state.correct = 0;
       state.showAnswer = false;
@@ -414,7 +378,7 @@
         stage.innerHTML = `
           <div class="empty">
             <h2>${escapeHtml(state.subject)} ${state.unit ? ' / ' + escapeHtml(state.unit) : ''}</h2>
-            <p>不正解の問題がありません。</p>
+            <p>不正解の問題はありません。</p>
             <div style="margin-top:14px;">
               <button class="pill" id="back">単元一覧へ戻る</button>
             </div>
@@ -423,12 +387,11 @@
         return;
       }
 
-      // ▼ pool にミス問題のみを入れて出題。新しいミスを記録し直すため wrong はクリア
       state.pool = state.wrong.slice();
       state.wrong = [];
 
-      const items = getItems(); // = state.pool
-      state.order = shuffle(Array.from({ length: items.length }, (_, i) => i)); // 常にランダム
+      const items = getItems();
+      state.order = shuffle(Array.from({ length: items.length }, (_, i) => i));
       state.index = 0;
       state.correct = 0;
       state.showAnswer = false;
@@ -436,8 +399,7 @@
       render();
     }
 
-    // ===== 復習SRS（localStorage） =====
-    const SKEY = 'gk_srs_v1';  // スキーマバージョン
+    const SKEY = `${APP_NS}_srs_v1`;
 
     function lsLoad() {
       try { return JSON.parse(localStorage.getItem(SKEY) || '{}'); }
@@ -445,24 +407,20 @@
     }
     function lsSave(obj) { localStorage.setItem(SKEY, JSON.stringify(obj)); }
 
-    // 単元ID（科目+単元）を一意に
     function unitId(subject, unit) {
       return `${subject}|||${unit ?? 'ALL'}`;
     }
 
-    // 復習ステップ（日数）：1日後 / 7日後 / 30日後
-    const SRS_STEPS = [1, 7, 30]; // 日
+    const SRS_STEPS = [1, 7, 30];
 
-    // レコード初期形
     function emptyRec() {
       return {
-        baseDate: null,   // 初回全問やりきった日（YYYY-MM-DD）
-        step: 0,          // 0..3（次に目指すインデックス。3で完了）
-        nextDue: null,    // 次の復習予定日（YYYY-MM-DD）
+        baseDate: null,
+        step: 0,
+        nextDue: null,
       };
     }
 
-    // ▼ ローカル日付ユーティリティ（UTCを使わない）
     function fmtYMD(d) {
       const y = d.getFullYear();
       const m = String(d.getMonth() + 1).padStart(2, '0');
@@ -474,7 +432,9 @@
       return new Date(y, (m || 1) - 1, d || 1);
     }
     function todayStr() {
-      return fmtYMD(new Date());
+      const d = new Date();
+      if (d.getHours() < 5) d.setDate(d.getDate() - 1);
+      return fmtYMD(d);
     }
     function addDaysStr(ymd, days) {
       const d = parseLocalYMD(ymd);
@@ -488,7 +448,6 @@
       return d <= t;
     }
 
-    // 期日表示用（一覧の「◯日後」表示で利用）
     function daysBetween(aYmd, bYmd) {
       const a = parseLocalYMD(aYmd).getTime();
       const b = parseLocalYMD(bYmd).getTime();
@@ -501,7 +460,7 @@
     function formatDueTag(nextDue) {
       const d = daysUntil(nextDue);
       if (d === null) return '';
-      if (d < 0)   return `期限切れ${Math.abs(d)}日`;
+      if (d < 0)   return `予定日+${Math.abs(d)}日`;
       if (d === 0) return `今日`;
       return `${d}日後`;
     }
@@ -533,7 +492,6 @@
     function next() {
       const items = getItems();
 
-      // まだ問題が残っている → 次の問題へ
       if (state.index + 1 < items.length) {
         state.index += 1;
         state.showAnswer = false;
@@ -541,12 +499,10 @@
         return;
       }
 
-      // ---- ここから終了処理 ----
       const n = items.length;
       const rate = n ? Math.round((state.correct / n) * 100) : 0;
       const hasWrong = state.wrong.length > 0;
 
-      // ▼ SRS（復習予定）の更新：単元出題のみ対象（unit が null の科目全体は対象外）
       (function updateSRS() {
         try {
           if (!state.subject || state.unit == null) return;
@@ -559,22 +515,15 @@
           const wrongCount = Array.isArray(state.wrong) ? state.wrong.length : 0;
           const noWrong    = wrongCount === 0;
 
-          // ★超強制ガード：不正解が1問でもあれば何も更新しない（初回も以後も）
           if (!noWrong) {
-            // もし初回以前で誤ってbaseDateが作られていたら触らず据え置き
-            // （リセットしたい運用なら、ここで rec を初期化してもよい）
             return;
           }
 
-          // ここから下は「全問正解」のときだけ来る
-
           if (!rec.baseDate) {
-            // 初回：全問正解のときだけ予定を作る
             rec.baseDate = today;
-            rec.step = 0; // 次に参照するステップのインデックス（0=+1日）
+            rec.step = 0;
             rec.nextDue = addDaysStr(rec.baseDate, SRS_STEPS[0]);
           } else {
-            // 2回目以降：期日が今日以前なら step を1つ進める（完了で nextDue=null）
             if (isOnOrBeforeToday(rec.nextDue) && rec.step < SRS_STEPS.length) {
               rec.step += 1;
               rec.nextDue = (rec.step < SRS_STEPS.length)
@@ -590,9 +539,6 @@
         }
       })();
 
-
-
-      // ▼ 不正解リストHTML
       let wrongListHtml = "";
       if (hasWrong) {
         wrongListHtml = `
@@ -613,12 +559,11 @@
           </div>`;
       }
 
-      // ▼ 結果画面
       stage.innerHTML = `
         <div class="empty" style="max-width:720px; margin:auto;">
           <h2>${escapeHtml(state.subject)}${state.unit ? ' / ' + escapeHtml(state.unit) : ''}</h2>
           <p>スコア：<strong>${state.correct} / ${n}</strong>（${rate}%）</p>
-          ${hasWrong ? `<p style="margin-top:4px;">不正解：<strong>${state.wrong.length}</strong> 件</p>` : ''}
+          ${hasWrong ? `<p style="margin-top:4px;">不正解：<strong>${state.wrong.length}</strong> 問</p>` : ''}
           <div style="margin-top:14px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
             <button class="pill" id="retry">もう一度</button>
             ${hasWrong ? `<button class="pill" id="retryWrong">不正解だけ</button>` : ''}
@@ -628,7 +573,6 @@
           ${wrongListHtml}
         </div>`;
 
-      // ▼ イベント
       document.getElementById('retry').addEventListener('click', () => startQuiz());
       if (hasWrong) {
         document.getElementById('retryWrong').addEventListener('click', startQuizFromWrong);
@@ -636,75 +580,543 @@
       document.getElementById('backSubject').addEventListener('click', () => { state.mode='idle'; render(); });
       document.getElementById('backHome').addEventListener('click', () => { tray.querySelector('[data-key="home"]').click(); });
 
-      // 完了後は idle 扱い
       state.mode = 'idle';
     }
 
     function renderUnitList() {
-      const items = state.subject === 'home' ? [] : DATA.filter(x => x.教材 === state.subject);
-      if (!items.length) {
-        stage.innerHTML = `
-          <div class="empty">
-            <h2>${escapeHtml(state.subject)}</h2>
-            <p>この科目のデータが見つかりません。</p>
-          </div>`;
-        return;
-      }
-
-      // 単元ごと集計
+      const subject = state.subject;
+      const items = state.subject === 'home'
+      ? []
+      : DATA.filter(x => x.教材 === subject);
+  
       const unitMap = new Map();
       for (const it of items) {
-        const key = String(it.単元);
-        unitMap.set(key, (unitMap.get(key) || 0) + 1);
+      const key = String(it.単元);
+      unitMap.set(key, (unitMap.get(key) || 0) + 1);
       }
-      const units = Array.from(unitMap.entries()).sort((a,b)=> a[0].localeCompare(b[0], 'ja'));
+      const units = Array.from(unitMap.entries())
+      .sort((a, b) => a[0].localeCompare(b[0], 'ja'));
 
-      // ▼ SRSから各単元の記録を取得
+      const hasUnits = units.length > 0;
       const srs = lsLoad();
 
-      // ▼ ここを unitCardHTML() に統一（←ゲージ反映の肝）
-      const listHtml = units.map(([u, c]) => {
-        const id = unitId(state.subject, u);
-        const rec = srs[id]; // {baseDate, step, nextDue} | undefined
-        return unitCardHTML(state.subject, u, c, rec, false);
-      }).join('');
-
-      stage.innerHTML = `
-        <div style="width:100%; max-width:720px; display:grid; gap:12px;">
-          <div style="display:flex; justify-content:space-between; align-items:end; gap:10px;">
-            <div>
-              <h2 style="margin:0; font-size:20px;">${escapeHtml(state.subject)}</h2>
-            </div>
-            <button class="pill" id="startAll">すべての単元</button>
+        const listHtml = hasUnits
+          ? units.map(([u, c]) => {
+              const id  = unitId(subject, u);
+              const rec = srs[id];
+              return unitCardHTML(subject, u, c, rec, false, true);
+          }).join('')
+        : `
+          <div class="empty" style="padding:16px 0;">
+          <h2>${escapeHtml(subject)}</h2>
+          <p>この科目のデータが見つかりません。</p>
           </div>
-          ${listHtml}
-        </div>`;
+        `;
 
-      document.getElementById('startAll').addEventListener('click', () => { state.unit = null; startQuiz(); });
+    stage.innerHTML = `
+        <div style="width:100%; max-width:720px; display:grid; gap:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:end; gap:10px;">
+            <div>
+            <h2 style="margin:0; font-size:20px;">${escapeHtml(state.subject)}</h2>
+            </div>
+            <div style="display:flex; gap:8px;">
+            <button class="pill" id="addUnit">＋</button>
+            </div>
+        </div>
+        ${listHtml}
+        </div>
+      `;
 
-      // ▼ 単元一覧は data-unit-card クリックで開始（unitCardHTML 内で data-unit-card を埋めておく）
-      stage.querySelectorAll('button[data-unit-card]').forEach(btn => {
-        btn.addEventListener('click', () => startQuiz(btn.getAttribute('data-unit-card')));
+      document.getElementById('addUnit').addEventListener('click', () => {
+        renderUnitCreator(state.subject);
       });
-    }
 
-    // 教科ごとのラベル設定
-    function getLabelsForSubject(subject) {
-      switch (subject) {
-        case '漢字':       return ['書き', '意味'];
-        case '現代文単語': return ['読み', '意味'];
-        case '古典文法':   return ['読み', '意味'];
-        case '古典単語':   return ['読み', '意味'];
-        case '古典常識':   return ['読み', '意味'];
-        case '漢文句法':   return ['書き下し', '意味'];
-        case '漢文語彙':   return ['書き下し', '意味'];
-        case '漢文常識':   return ['読み', '意味'];
-        default:       return ['解答1', '解答2'];
+      if (hasUnits) {
+        stage.querySelectorAll('button[data-due-start]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-due-start');
+            const [subject, unit] = id.split('|||');
+
+            state.subject = subject;
+            state.unit = unit === 'ALL' ? null : unit;
+            state.mode = 'idle';
+            startQuiz(state.unit);
+          });
+        });
+
+        stage.querySelectorAll('button[data-unit-list]').forEach(btn => {
+          btn.addEventListener('click', () => {
+          const unit = btn.getAttribute('data-unit-list');
+            renderProblemList(state.subject, unit);
+          });
+        });
       }
     }
 
+    function renderUnitCreator(subject) {
+    const baseSubject = String(subject);
 
-    // field1 / field2 をラベル付きペアで返す
+    if (!Array.isArray(unitCreatorRows) || unitCreatorRows.length === 0) {
+        unitCreatorRows = Array.from({ length: 30 }, () => ({ main: '', f1: '', f2: '' }));
+    }
+
+    function syncFromDom() {
+        const rows = unitCreatorRows;
+        rows.forEach((row, i) => {
+        const mainEl = document.getElementById(`q-main-${i}`);
+        const f1El   = document.getElementById(`q-f1-${i}`);
+        const f2El   = document.getElementById(`q-f2-${i}`);
+        if (!mainEl || !f1El || !f2El) return;
+        row.main = mainEl.value;
+        row.f1   = f1El.value;
+        row.f2   = f2El.value;
+        });
+    }
+
+    function draw() {
+        const rowsHtml = unitCreatorRows.map((row, i) => {
+        const n = i + 1;
+        return `
+            <div style="
+            display:grid;
+            grid-template-columns: max-content 1fr 1fr 1fr max-content max-content;
+            gap:6px 8px;
+            align-items:center;
+            ">
+            <div style="font-size:12px; color:var(--muted);">No.${n}</div>
+            <input
+                type="text"
+                placeholder=""
+                id="q-main-${i}"
+                value="${escapeAttr(row.main)}"
+                style="padding:8px 10px; border-radius:8px; border:1px solid var(--stroke);
+                    background:rgba(15,23,42,.9); color:var(--text); font-size:13px;">
+            <input
+                type="text"
+                placeholder=""
+                id="q-f1-${i}"
+                value="${escapeAttr(row.f1)}"
+                style="padding:8px 10px; border-radius:8px; border:1px solid var(--stroke);
+                    background:rgba(15,23,42,.9); color:var(--text); font-size:13px;">
+            <input
+                type="text"
+                placeholder=""
+                id="q-f2-${i}"
+                value="${escapeAttr(row.f2)}"
+                style="padding:8px 10px; border-radius:8px; border:1px solid var(--stroke);
+                    background:rgba(15,23,42,.9); color:var(--text); font-size:13px;">
+            <button
+                type="button"
+                class="pill"
+                data-delete-row="${i}"
+                style="
+                padding:0 10px;
+                height:32px;
+                font-size:14px;
+                min-width:auto;
+                border-color:#f87171;
+                color:#fecaca;
+                ">
+                ✕
+            </button>
+            <button
+              type="button"
+              class="pill"
+              data-insert-after="${i}"
+              style="
+                padding:0 8px;
+                height:32px;
+                font-size:12px;
+                min-width:auto;
+              ">
+              ↙
+            </button>
+            </div>
+          `;
+        }).join('');
+
+        stage.innerHTML = `
+        <div style="width:100%; max-width:720px; margin:auto; display:grid; gap:14px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+            <h2 style="margin:0; font-size:20px;">単元追加（${escapeHtml(subject)}）</h2>
+            <button class="pill" id="backUnits">↶</button>
+            </div>
+
+            <div style="border:1px solid var(--stroke); background:var(--card);
+                        border-radius:16px; padding:14px; display:grid; gap:10px;">
+            <div style="font-size:12px; color:var(--muted);">
+                科目：${escapeHtml(baseSubject)}
+            </div>
+            <label style="display:grid; gap:4px; font-size:13px;">
+                <span style="color:var(--muted);">単元名</span>
+                <input id="newUnitName" type="text"
+                placeholder=""
+                style="padding:8px 10px; border-radius:8px; border:1px solid var(--stroke);
+                        background:rgba(15,23,42,.9); color:var(--text); font-size:14px;">
+            </label>
+            </div>
+
+            <div style="border:1px solid var(--stroke); background:var(--card);
+                        border-radius:16px; padding:14px; display:grid; gap:10px;">
+            <div style="font-size:14px; color:var(--muted); margin-bottom:4px;">
+                問題入力（問題｜答え1｜答え2）<br>
+            </div>
+            <div style="display:grid; gap:8px;">
+                ${rowsHtml}
+            </div>
+            </div>
+
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="pill" id="add30Rows">+30問</button>
+            <button class="pill" id="saveUnit">単元追加</button>
+            </div>
+        </div>
+        `;
+
+        document.getElementById('backUnits').addEventListener('click', () => {
+        unitCreatorRows = null;
+        renderUnitList();
+        });
+
+        document.getElementById('add30Rows').addEventListener('click', () => {
+        syncFromDom();
+        for (let i = 0; i < 30; i++) {
+            unitCreatorRows.push({ main: '', f1: '', f2: '' });
+        }
+        draw();
+        });
+
+        stage.querySelectorAll('button[data-delete-row]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const idx = Number(btn.getAttribute('data-delete-row')) || 0;
+            syncFromDom();
+            unitCreatorRows.splice(idx, 1);
+            draw();
+        });
+        });
+
+        stage.querySelectorAll('button[data-insert-after]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const idx = Number(btn.getAttribute('data-insert-after')) || 0;
+            syncFromDom();
+            unitCreatorRows.splice(idx + 1, 0, { main: '', f1: '', f2: '' });
+            draw();
+        });
+        });
+
+        document.getElementById('saveUnit').addEventListener('click', async () => {
+        syncFromDom();
+
+        const unitName = document.getElementById('newUnitName').value.trim();
+        if (!unitName) {
+            alert('単元名を入力してください。');
+            return;
+        }
+
+        const newRows = [];
+        for (const row of unitCreatorRows) {
+            const main = String(row.main || '').trim();
+            const f1   = String(row.f1   || '').trim();
+            const f2   = String(row.f2   || '').trim();
+            if (!main && !f1 && !f2) continue;
+
+            newRows.push({
+            id: null,
+            教材: baseSubject,
+            単元: unitName,
+            fields: {
+                main,
+                field1: f1,
+                field2: f2,
+            }
+            });
+        }
+
+        if (!newRows.length) {
+            alert('1問以上入力してください。');
+            return;
+        }
+
+        const maxId = DATA.length
+            ? Math.max(...DATA.map(r => Number(r.id) || 0))
+            : 0;
+        newRows.forEach((row, idx) => {
+            row.id = maxId + idx + 1;
+        });
+
+        try {
+            await idbBulkPut(newRows);
+            DATA = DATA.concat(newRows);
+            unitCreatorRows = null;
+
+            alert(`単元「${unitName}」を追加しました（${newRows.length}問）。`);
+
+            renderProblemList(subject, unitName);
+        } catch (e) {
+            console.error(e);
+            alert('単元の追加に失敗しました: ' + e.message);
+        }
+        });
+    }
+
+    draw();
+    }
+
+    function getLabelsForSubject(subject) {
+      switch (subject) {
+          case '漢字':       return ['書き', '意味'];
+          case '現代文単語': return ['読み', '意味'];
+          case '古典文法':   return ['読み', '意味'];
+          case '古典単語':   return ['読み', '意味'];
+          case '古典常識':   return ['読み', '意味'];
+          case '漢文句法':   return ['書き下し', '意味'];
+          case '漢文語彙':   return ['書き下し', '意味'];
+          case '漢文常識':   return ['読み', '意味'];
+          default:           return ['解答1', '解答2'];
+      }
+    }
+
+    function renderProblemList(subject, unit) {
+    const base = String(subject);
+    const rows = DATA.filter(x =>
+        x.教材 === base && String(x.単元) === String(unit)
+    );
+
+    if (!rows.length) {
+        stage.innerHTML = `
+        <div class="empty">
+            <h2>${escapeHtml(subject)} / ${escapeHtml(unit)}</h2>
+            <p>この単元の問題が見つかりません。</p>
+            <div style="margin-top:14px;">
+            <button class="pill" id="backUnits">単元一覧に戻る</button>
+            </div>
+        </div>
+        `;
+        document.getElementById('backUnits').addEventListener('click', () => {
+        state.mode = 'idle';
+        render();
+        });
+        return;
+    }
+
+    const labels = getLabelsForSubject(subject);
+
+    stage.innerHTML = `
+        <div style="width:100%; max-width:720px; margin:auto; display:grid; gap:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+            <h2 style="margin:0; font-size:20px;">
+            ${escapeHtml(subject)} / ${escapeHtml(unit)} 一覧
+            </h2>
+            <div style="display:flex; gap:8px;">
+            <button class="pill" id="addProblem">＋</button>
+            <button class="pill" id="backUnits">↶</button>
+            </div>
+        </div>
+    
+        <div style="display:grid; gap:8px;">
+            ${rows.map((row, idx) => {
+            const f = row.fields || {};
+            const main = escapeHtml(f.main ?? '');
+            const f1   = escapeHtml(f.field1 ?? '');
+            const f2   = escapeHtml(f.field2 ?? '');
+
+            const label1 = escapeHtml(labels[0] || '解答1');
+            const label2 = escapeHtml(labels[1] || '解答2');
+
+            return `
+                <div style="border:1px solid var(--stroke); background:rgba(255,255,255,.03); border-radius:12px; padding:10px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+                    <div>
+                    <div style="font-size:12px; color:var(--muted);">No.${idx + 1}</div>
+                    <div style="font-size:18px; font-weight:700; margin-top:2px;">${main}</div>
+                    ${f1 ? `
+                        <div style="font-size:14px; color:var(--muted); margin-top:4px;">
+                        <strong>${label1}：</strong> ${f1}
+                        </div>` : ''}
+                    ${f2 ? `
+                        <div style="font-size:14px; color:var(--muted); margin-top:2px;">
+                        <strong>${label2}：</strong> ${f2}
+                        </div>` : ''}
+                    </div>
+                    <button class="pill" data-edit-id="${row.id}">編集</button>
+                </div>
+                </div>
+            `;
+            }).join('')}
+        </div>
+        </div>
+    `;
+
+    document.getElementById('backUnits').addEventListener('click', () => {
+        state.mode = 'idle';
+        render();
+    });
+
+    document.getElementById('addProblem').addEventListener('click', () => {
+        renderProblemEditor(subject, unit, null);
+    });
+
+    stage.querySelectorAll('button[data-edit-id]').forEach(btn => {
+        btn.addEventListener('click', () => {
+        const id = Number(btn.getAttribute('data-edit-id'));
+        renderProblemEditor(subject, unit, id);
+        });
+    });
+    }
+
+    function renderProblemEditor(subject, unit, id) {
+    const baseSubject = String(subject);  // 国語はそのまま
+    const isNew = (id == null);
+
+    let row;
+    if (isNew) {
+        row = {
+        id: null,
+        教材: baseSubject,
+        単元: unit,
+        fields: {
+            main: '',
+            field1: '',
+            field2: '',
+        }
+        };
+    } else {
+        row = DATA.find(r => r.id === id);
+        if (!row) {
+        alert('該当の問題が見つかりませんでした');
+        renderProblemList(subject, unit);
+        return;
+        }
+    }
+
+    const f = row.fields || {};
+    const labels = getLabelsForSubject(subject); // ['読み','意味'] など
+
+    stage.innerHTML = `
+        <div style="width:100%; max-width:720px; margin:auto; display:grid; gap:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+            <h2 style="margin:0; font-size:20px;">${isNew ? '新規作成' : '編集'}</h2>
+            <button class="pill" id="backList">↶</button>
+        </div>
+
+        <div style="border:1px solid var(--stroke); background:var(--card);
+            border-radius:16px; padding:14px; display:grid; gap:10px;">
+
+            ${isNew ? '' : `
+            <div style="font-size:12px; color:var(--muted);">ID: ${id}</div>
+            `}
+
+            <div style="font-size:12px; color:var(--muted);">
+            科目：${escapeHtml(baseSubject)} ／ 単元：${escapeHtml(unit)}
+            </div>
+
+            <label style="display:grid; gap:4px; font-size:13px;">
+            <span style="color:var(--muted);">表（問題）</span>
+            <input id="edit-main" type="text"
+                value="${escapeAttr(f.main ?? '')}"
+                style="padding:8px 10px; border-radius:8px; border:1px solid var(--stroke);
+                background:rgba(15,23,42,.9); color:var(--text);">
+            </label>
+
+            <label style="display:grid; gap:4px; font-size:13px;">
+            <span style="color:var(--muted);">${escapeHtml(labels[0] || '裏1')}</span>
+            <input id="edit-f1" type="text"
+                value="${escapeAttr(f.field1 ?? '')}"
+                style="padding:8px 10px; border-radius:8px; border:1px solid var(--stroke);
+                background:rgba(15,23,42,.9); color:var(--text);">
+            </label>
+
+            <label style="display:grid; gap:4px; font-size:13px;">
+            <span style="color:var(--muted);">${escapeHtml(labels[1] || '裏2')}</span>
+            <input id="edit-f2" type="text"
+                value="${escapeAttr(f.field2 ?? '')}"
+                style="padding:8px 10px; border-radius:8px; border:1px solid var(--stroke);
+                background:rgba(15,23,42,.9); color:var(--text);">
+            </label>
+
+        </div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="pill" id="saveEdit">${isNew ? '追加' : '保存'}</button>
+            ${isNew ? '' : `
+            <button class="pill" id="deleteEdit"
+            style="border-color:#f97373; color:#fecaca; margin-left:auto;">削除</button>
+            `}
+        </div>
+        </div>
+    `;
+
+    document.getElementById('backList').addEventListener('click', () => {
+        renderProblemList(subject, unit);
+    });
+
+    document.getElementById('saveEdit').addEventListener('click', async () => {
+        const newMain = document.getElementById('edit-main').value.trim();
+        const newF1   = document.getElementById('edit-f1').value.trim();
+        const newF2   = document.getElementById('edit-f2').value.trim();
+
+        if (!newMain || !newF1 || !newF2) {
+        if (!confirm('空のデータがあります。このまま保存しますか？')) return;
+        }
+
+        if (isNew) {
+        const nextId = (DATA.length
+            ? Math.max(...DATA.map(r => Number(r.id) || 0)) + 1
+            : 1);
+
+        const newRow = {
+            id: nextId,
+            教材: baseSubject,
+            単元: unit,
+            fields: {
+            main: newMain,
+            field1: newF1,
+            field2: newF2,
+            }
+        };
+
+        try {
+            await idbSaveOne(newRow);
+            DATA.push(newRow);
+            renderProblemList(subject, unit);
+        } catch (e) {
+            console.error(e);
+            alert('追加に失敗しました: ' + e.message);
+        }
+        } else {
+        const updated = {
+            ...row,
+            fields: {
+            main: newMain,
+            field1: newF1,
+            field2: newF2,
+            }
+        };
+
+        try {
+            await idbSaveOne(updated);
+            const idx = DATA.findIndex(r => r.id === id);
+            if (idx >= 0) DATA[idx] = updated;
+
+            renderProblemList(subject, unit);
+        } catch (e) {
+            console.error(e);
+            alert('保存に失敗しました: ' + e.message);
+        }
+        }
+    });
+
+    if (!isNew) {
+        document.getElementById('deleteEdit').addEventListener('click', async () => {
+        if (!confirm('この問題を削除しますか？')) return;
+        await idbDeleteOne(id);
+        DATA = DATA.filter(r => r.id !== id);
+        alert('削除しました');
+        renderProblemList(subject, unit);
+        });
+    }
+    }
+
     function getAnswerPairs(row) {
       const labels = getLabelsForSubject(state.subject);
       const a1 = String(row?.fields?.field1 ?? '').trim();
@@ -716,8 +1128,11 @@
     }
 
     function render() {
+      if (state.view === 'settings') {
+        return renderSettings();
+      }
+      
       const items = getItems();
-
       if (state.subject === 'home') {
         const srs = lsLoad();
 
@@ -727,7 +1142,7 @@
         Object.entries(srs).forEach(([id, rec]) => {
           if (!rec || rec.step >= 3 || !rec.nextDue) return;
           const [subject, unit] = id.split('|||');
-          const delta = daysUntil(rec.nextDue); // ローカル日付基準
+          const delta = daysUntil(rec.nextDue);
           if (delta < 0) overdue.push({ subject, unit, rec, late: Math.abs(delta) });
           else if (delta === 0) todayDue.push({ subject, unit, rec });
         });
@@ -735,9 +1150,18 @@
         const overdueHtml = overdue.length
           ? `
             <div style="margin-top:8px; text-align:left;">
-              <h3 style="margin:0 0 8px; font-size:20px; color:#ffffff; font-weight:800;">未完了（期限過ぎ）</h3>
+              <h3 style="margin:0 0 8px; font-size:20px; color:#ffffff; font-weight:800;">未完了</h3>
               <div style="display:grid; gap:8px;">
-                ${overdue.map(x => unitCardHTML(x.subject, x.unit, unitCount(x.subject, x.unit), x.rec, true)).join('')}
+                ${overdue.map(x =>
+                  unitCardHTML(
+                    x.subject,
+                    x.unit,
+                    unitCount(x.subject, x.unit),
+                    x.rec,
+                    true,
+                    false
+                  )
+                ).join('')}
               </div>
             </div>`
           : '';
@@ -747,7 +1171,16 @@
             <div style="margin-top:16px; text-align:left;">
               <h3 style="margin:0 0 8px; font-size:20px; color:#ffffff; font-weight:800;">今日の復習</h3>
               <div style="display:grid; gap:8px;">
-                ${todayDue.map(x => unitCardHTML(x.subject, x.unit, unitCount(x.subject, x.unit), x.rec, false)).join('')}
+                ${todayDue.map(x =>
+                  unitCardHTML(
+                    x.subject,
+                    x.unit,
+                    unitCount(x.subject, x.unit),
+                    x.rec,
+                    false,
+                    false
+                  )
+                ).join('')}
               </div>
             </div>`
           : `<p style="margin-top:12px; font-size:13px; color:var(--muted)">本日予定の復習はありません。</p>`;
@@ -758,13 +1191,12 @@
             ${todayHtml}
           </div>`;
 
-        // 「出題」ボタン → 直接クイズ開始（即出題）
         stage.querySelectorAll('[data-due-start]').forEach(btn => {
           btn.addEventListener('click', () => {
             const [subject, unit] = btn.getAttribute('data-due-start').split('|||');
             state.subject = subject;
             state.unit = unit === 'ALL' ? null : unit;
-            startQuiz(state.unit); // ← 単元画面を挟まずに直接開始
+            startQuiz(state.unit);
           });
         });
 
@@ -775,7 +1207,6 @@
         return renderUnitList();
       }
 
-      // mode === 'quiz'
       const qa = currentQA();
       if (!qa) return renderUnitList();
       const { q } = qa;
@@ -793,13 +1224,11 @@
             <div>正解：${state.correct}　不正解：${state.wrong.length}</div>
           </div>
 
-          <!-- 問題 -->
           <div style="border:1px solid var(--stroke); background:var(--card); border-radius:20px; padding:18px; box-shadow: var(--shadow);">
             <div style="font-size:14px; color:var(--muted); margin-bottom:6px;">問題</div>
             <div style="font-size:28px; font-weight:800; line-height:1.25;">${escapeHtml(q)}</div>
           </div>
 
-          <!-- 答え -->
           <div id="answerBox" style="margin-top:14px;">
             <div style="border:1px solid var(--stroke); background:rgba(255,255,255,.03); border-radius:16px; padding:16px;">
               <div style="font-size:14px; color:var(--muted); margin-bottom:6px;">答え</div>
@@ -814,16 +1243,142 @@
             </div>
           </div>
 
-          <!-- ボタン -->
           <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
             <button class="pill" id="reveal">${state.showAnswer ? '答えを隠す' : '答えを表示'}</button>
-            <button class="pill" id="ok">正解</button>
-            <button class="pill" id="ng">不正解</button>
+            ${state.showAnswer ? `
+              <button class="pill" id="ok">正解</button>
+              <button class="pill" id="ng">不正解</button>
+            ` : ''}
           </div>
         </div>`;
-      document.getElementById('reveal').addEventListener('click', () => { state.showAnswer = !state.showAnswer; render(); });
-      document.getElementById('ok').addEventListener('click', () => mark(true));
-      document.getElementById('ng').addEventListener('click', () => mark(false));
+      document.getElementById('reveal')
+        .addEventListener('click', () => { state.showAnswer = !state.showAnswer; render(); });
+      
+      document.getElementById('ok')?.addEventListener('click', () => mark(true));
+      document.getElementById('ng')?.addEventListener('click', () => mark(false));
+    }
+    function makeExportFilename() {
+      const d = new Date();
+      const pad = (n) => String(n).padStart(2, '0');
+
+      const y = d.getFullYear();
+      const m = pad(d.getMonth() + 1);
+      const day = pad(d.getDate());
+      const h = pad(d.getHours());
+      const min = pad(d.getMinutes());
+      const s = pad(d.getSeconds());
+
+      return `export-${y}-${m}-${day}_${h}-${min}-${s}.json`;
+    }
+
+    function renderSettings() {
+      const srsCount = Object.keys(lsLoad() || {}).length;
+    
+      stage.innerHTML = `
+        <div style="width:100%; max-width:720px; margin:auto; display:grid; gap:14px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+            <h2 style="margin:0; font-size:20px;">設定</h2>
+            <button class="pill" id="backMain">↶</button>
+          </div>
+    
+          <div style="border:1px solid var(--stroke); background:var(--card); border-radius:16px; padding:14px;">
+            <div style="font-size:14px; color:var(--muted); margin-bottom:6px;">DB管理</div>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <label class="pill" for="jsonFileLive" style="cursor:pointer;">JSON取り込み</label>
+              <input id="jsonFileLive" type="file" accept="application/json" multiple style="display:none">
+              <button class="pill" id="exportJsonLive">JSON書き出し</button>
+              <button class="pill" id="clearDbLive">DB消去</button>
+            </div>
+          </div>
+    
+          <div style="border:1px solid var(--stroke); background:var(--card); border-radius:16px; padding:14px;">
+            <div style="font-size:14px; color:var(--muted); margin-bottom:6px;">学習履歴</div>
+            <div style="font-size:13px; color:var(--muted); margin-bottom:10px;">
+              <strong>${srsCount}</strong>件の記録が見つかりました
+            </div>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button class="pill" id="resetSrsLive">学習履歴をリセット</button>
+            </div>
+          </div>
+
+          <div style="border:1px solid var(--stroke); background:var(--card); border-radius:16px; padding:14px;">
+            <div style="font-size:14px; color:var(--muted); margin-bottom:6px;">更新履歴</div>
+            ${renderReleaseNotes()}
+          </div>
+        </div>
+      `;
+    
+      document.getElementById('backMain')?.addEventListener('click', () => {
+        state.view = 'main';
+        render();
+      });
+    
+      document.getElementById('jsonFileLive')?.addEventListener('change', async (ev) => {
+        const files = ev.target.files;
+        if (!files || !files.length) return;
+      
+        try {
+          const result = await importJsonFiles(files);
+          if (result) {
+            alert(`取り込み完了：${result.imported}件（${result.files}ファイル）`);
+            render();
+          }
+        } catch (e) {
+          alert('取り込み失敗：' + e.message);
+        } finally {
+          ev.target.value = '';
+        }
+      });
+
+      document.getElementById('exportJsonLive')?.addEventListener('click', async () => {
+        const all = await idbGetAll();
+        const blob = new Blob([JSON.stringify(all, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = makeExportFilename();
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+    
+      document.getElementById('clearDbLive')?.addEventListener('click', async () => {
+        if (!confirm('カードDBを全消去します。よろしいですか？')) return;
+        await idbClear();
+        DATA = [];
+        alert('DBを空にしました。');
+        render();
+      });
+    
+      document.getElementById('resetSrsLive')?.addEventListener('click', () => {
+        if (!confirm('学習履歴をリセットしますか？')) return;
+        localStorage.removeItem(SKEY);
+        alert('学習履歴をリセットしました。');
+        render();
+      });
+    }
+
+    function renderReleaseNotes() {
+      if (!Array.isArray(RELEASE_NOTES) || RELEASE_NOTES.length === 0) {
+        return `<p style="font-size:13px; color:var(--muted);">更新履歴が見つかりません</p>`;
+      }
+    
+      return `
+        <div style="display:grid; gap:20px;">
+          ${RELEASE_NOTES.map(r => `
+            <div>
+              <div style="font-size:16px; font-weight:700;">
+                ${escapeHtml(r.version)}
+                <span style="font-size:12px; color:var(--muted); margin-left:6px;">
+                  ${escapeHtml(r.date)}
+                </span>
+              </div>
+              <ul style="margin:8px 0 0 18px; padding:0; font-size:13px;">
+                ${r.items.map(it => `<li>${escapeHtml(it)}</li>`).join('')}
+              </ul>
+            </div>
+          `).join('')}
+        </div>
+      `;
     }
 
     function escapeHtml(s) {
@@ -838,58 +1393,79 @@
       return String(s).replaceAll('"', '&quot;');
     }
 
-    // 初期表示
     render();
 
-    // 単元内の問題数
     function unitCount(subject, unit) {
       return DATA.filter(x => x.教材 === subject && String(x.単元) === String(unit)).length;
     }
 
-    // 単元カードHTML（一覧と同じ見た目）
-    function unitCardHTML(subject, unit, count, rec, emphasize = false) {
+    function unitCardHTML(subject, unit, count, rec, emphasize = false, withList = false) {
       const id = unitId(subject, unit);
       const dueTag = rec ? formatDueTag(rec.nextDue) : '';
       const progress = rec ? Math.min((rec.step + 1) / 4, 1) : 0;
       const pct = `${(Math.max(0, Math.min(1, progress)) * 100).toFixed(1)}%`;
-
-      // ---- Cyber Neon（視認性チューニング済み） ----
-      const startColor = '#A855F7';  // バイオレット（左）
-      const midColor   = '#6366F1';  // ネオンパープル（中）
-      const endColor   = '#0EA5E9';  // ネオンブルー（右）
-
-      // 期日行
+    
+      const startColor = '#A855F7';
+      const midColor   = '#6366F1';
+      const endColor   = '#0EA5E9';
+    
       const dueLine = rec
         ? `<div style="font-size:12px; color:var(--muted);">次の復習：${rec.nextDue || '—'}${dueTag ? `（${dueTag}）` : ''}</div>`
         : `<div style="font-size:12px; color:var(--muted);">次の復習：—</div>`;
-
+    
+      const rightButtons = withList
+        ? `
+          <div style="display:flex; gap:8px;">
+            <button
+              class="pill"
+              style="padding:0 14px;"
+              data-unit-list="${escapeAttr(unit)}">
+              📋
+            </button>
+            <button
+              class="pill"
+              style="padding:0 14px;"
+              data-judge="start"
+              data-due-start="${escapeAttr(id)}"
+              data-unit-card="${escapeAttr(unit)}">
+              🖊️
+            </button>
+          </div>`
+        : `
+          <button
+            class="pill"
+            data-judge="start"
+            data-due-start="${escapeAttr(id)}"
+            data-unit-card="${escapeAttr(unit)}">
+            🖊️
+          </button>`;
+    
       return `
         <div class="unit-card"
             data-subject="${escapeAttr(subject)}"
             data-unit-card="${escapeAttr(unit)}"
             style="
-              --pct:${pct};                         /* ← ゲージ幅（切り取り） */
-              --grad-start:${startColor};           /* ← グラデ色（背景に合うサイバー系） */
+              --pct:${pct};
+              --grad-start:${startColor};
               --grad-mid:${midColor};
               --grad-end:${endColor};
               border:1px solid var(--stroke);
               ${emphasize ? 'outline:2px solid rgba(96,165,250,.35);' : ''}">
-          <div class="uc-content" style="padding:14px; display:flex; justify-content:space-between; align-items:center; gap:12px;">
+          <div class="uc-content"
+               style="padding:14px; display:flex; justify-content:space-between; align-items:center; gap:12px;">
             <div>
               <div style="font-size:12px; color:var(--muted);">${escapeHtml(subject)}</div>
               <div style="font-size:18px; font-weight:800; color:var(--text);">${escapeHtml(unit)}</div>
               <div style="font-size:12px; color:var(--muted); margin-top:4px;">問題数：${count}</div>
               ${dueLine}
             </div>
-            <!-- ホーム用(data-due-start) / 単元一覧用(data-unit-card) 両対応 -->
-            <button class="pill" data-judge="start"data-due-start="${escapeAttr(id)}" data-unit-card="${escapeAttr(unit)}">出題</button>
+            ${rightButtons}
           </div>
         </div>`;
     }
 
   </script>
 
-  <!-- DEV: 一時的 管理用フローティングボタン＆パネル -->
   <div id="dev-fab" title="開発モード：今日に追加">DEV</div>
   <div id="dev-panel" role="dialog" aria-label="開発モードパネル" style="display:none;">
     <h4>今日の復習に追加（手動）</h4>
@@ -907,7 +1483,18 @@
   </div>
 
   <script>
-  const DEV_MODE = true; // 公開時は false に戻す
+
+  const DEV_MODE = false;
+
+  const RELEASE_NOTES = [
+  {
+    version: 'ver0.1.0',
+    date: '2025-11-29',
+    items: [
+    'β版リリース'
+    ]
+  }
+];
 
   function _srsHelpersReady() {
     return typeof lsLoad === 'function'
@@ -919,7 +1506,6 @@
       && typeof addDaysStr === 'function';
   }
 
-  // 今日が復習日のレコードを手動追加
   function addSRS_dueToday(subject, unit, stepIndex = 0) {
     if (!_srsHelpersReady()) { console.warn('SRSヘルパー未定義'); return; }
     if (!subject || !unit) { console.warn('subject/unit 必須'); return; }
@@ -934,13 +1520,13 @@
     const base = addDaysStr(today, -offset);
 
     rec.baseDate = base;
-    rec.step = stepIndex; // この段階が“今日の復習”
+    rec.step = stepIndex;
     rec.nextDue = today;
 
     srs[id] = rec;
     lsSave(srs);
     console.log('SRS追加/更新:', id, rec);
-    if (state.subject === 'home') render(); // ホーム表示中なら即反映
+    if (state.subject === 'home') render();
   }
 
   function initDevPanel() {
@@ -969,7 +1555,7 @@
 
     panel.querySelectorAll('[data-step]').forEach(btn => {
       btn.addEventListener('click', () => {
-        if (state?.unit == null) { updateTargetText(); return; } // 単元未選択は拒否
+        if (state?.unit == null) { updateTargetText(); return; }
         const step = parseInt(btn.getAttribute('data-step') || '0', 10);
         addSRS_dueToday(state.subject, state.unit, step);
         panel.style.display = 'none';
@@ -977,34 +1563,27 @@
     });
   }
 
-  // ★ DOM構築後に初期化（ここ重要）
   document.addEventListener('DOMContentLoaded', initDevPanel);
   </script>
-
+  
   <script>
     const settingsBtn = document.getElementById('settings-btn');
     const settingsPanel = document.getElementById('settings-panel');
-    const resetBtn = document.getElementById('reset-btn');
-
-    // 設定パネル開閉
+    
     settingsBtn.addEventListener('click', () => {
-      const show = settingsPanel.style.display === 'none';
-      settingsPanel.style.display = show ? 'block' : 'none';
-    });
-
-    // 復習履歴リセット
-    resetBtn.addEventListener('click', () => {
-      if (confirm('本当に全データをリセットしますか？')) {
-        localStorage.clear();
-        alert('進捗データを削除しました。');
-        location.reload();
+      if (state.view === 'settings') {
+        state.view = 'main';
+        if (settingsPanel) settingsPanel.style.display = 'none';
+      } else {
+        state.view = 'settings';
+        if (settingsPanel) settingsPanel.style.display = 'none';
       }
+      render();
     });
   </script>
 
   <script>
-  // ===== IndexedDB（cardsストア） =====
-  const DB_NAME = 'gk_cards';
+  const DB_NAME = '${APP_NS}_cards';
   const DB_VERSION = 1;
   const STORE = 'cards';
 
@@ -1058,53 +1637,131 @@
     await withStore(db, 'readwrite', (st) => st.clear());
   }
 
-  // ===== 起動時：DB -> DATA へロード（DBが空なら seed-data を流し込む） =====
-  async function bootDataFromIDB() {
-    // 1) DBから読み込む
-    let rows = await idbGetAll();
+async function importJsonFiles(fileList) {
+  const files = Array.from(fileList || []);
+  if (!files.length) return null;
 
-    // 2) 空なら <script id="seed-data"> の配列で初期化
-    if (!rows || rows.length === 0) {
-      const seedTag = document.getElementById('seed-data');
-      if (seedTag?.textContent?.trim()) {
-        try {
-          const seed = JSON.parse(seedTag.textContent);
-          if (Array.isArray(seed) && seed.length) {
-            await idbBulkPut(seed);
-            rows = await idbGetAll();
-            console.log('Seeded DB from <script id="seed-data">');
-          }
-        } catch (e) {
-          console.warn('Seed parse failed:', e);
-        }
-      }
+  const existing = await idbGetAll();
+  const maxId = existing.length
+    ? Math.max(...existing.map(r => Number(r.id) || 0))
+    : 0;
+
+  const makeKey = (row) => {
+    const subj = String(row?.教材 ?? row?.subject ?? '').trim();
+    const unit = String(row?.単元 ?? row?.unit ?? '').trim();
+    const main = String(row?.fields?.main ?? '').trim();
+    if (!subj || !unit || !main) return '';
+    return `${subj}|||${unit}|||${main}`;
+  };
+
+  const seen = new Set(
+    existing
+      .map(makeKey)
+      .filter(k => k)
+  );
+
+  const merged = [];
+
+  for (const file of files) {
+    const text = await file.text();
+    let arr;
+    try {
+      arr = JSON.parse(text);
+    } catch (e) {
+      throw new Error(`${file.name}: JSONのパースに失敗しました`);
+    }
+    if (!Array.isArray(arr)) {
+      throw new Error(`${file.name}: JSONは配列である必要があります`);
     }
 
-    // 3) グローバル DATA を差し替え（既存ロジック互換）
+    for (const rawRow of arr) {
+      const subj = String(rawRow?.教材 ?? rawRow?.subject ?? '').trim();
+      const unit = String(rawRow?.単元 ?? rawRow?.unit ?? '').trim();
+      const fieldsSrc = rawRow?.fields && typeof rawRow.fields === 'object'
+        ? rawRow.fields
+        : {};
+
+      const main = String(fieldsSrc.main ?? '').trim();
+      const f1   = String(fieldsSrc.field1 ?? '').trim();
+      const f2   = String(fieldsSrc.field2 ?? '').trim();
+
+      if (!subj || !unit || !main) continue;
+
+      const tmpKey = `${subj}|||${unit}|||${main}`;
+      if (seen.has(tmpKey)) continue;
+      seen.add(tmpKey);
+
+      const row = {
+        ...rawRow,
+        教材: subj,
+        単元: unit,
+        fields: {
+          ...fieldsSrc,
+          main,
+          field1: f1,
+          ...(f2 ? { field2: f2 } : ('field2' in fieldsSrc ? { field2: f2 } : {})),
+        },
+      };
+
+      merged.push(row);
+    }
+  }
+
+  if (!merged.length) {
+    return {
+      files: files.length,
+      imported: 0,
+      total: existing.length,
+    };
+  }
+
+  const normalized = merged.map((row, idx) => ({
+    ...row,
+    id: maxId + idx + 1,
+  }));
+
+  await idbBulkPut(normalized);
+
+  const all = await idbGetAll();
+  DATA = all;
+
+  return {
+    files: files.length,
+    imported: normalized.length,
+    total: all.length,
+  };
+}
+
+  async function idbSaveOne(row) {
+    const db = await openDb();
+    await withStore(db, 'readwrite', (st) => {
+      st.put(row);
+    });
+  }
+  
+  async function idbDeleteOne(id) {
+    const db = await openDb();
+    await withStore(db, 'readwrite', (st) => {
+      st.delete(id);
+    });
+  }
+  
+  async function bootDataFromIDB() {
+    let rows = await idbGetAll();
     DATA = rows;
     console.log('DATA loaded from IDB:', rows.length);
   }
 
-  // ===== 設定パネルのUI（開閉は既存の settings-btn を想定） =====
-  document.getElementById('settings-btn')?.addEventListener('click', () => {
-    const p = document.getElementById('settings-panel');
-    if (!p) return;
-    p.style.display = (p.style.display === 'block') ? 'none' : 'block';
-  });
-
-  // ===== ファイル取込（JSON -> DBに保存 -> DATA更新） =====
   document.getElementById('jsonFile')?.addEventListener('change', async (ev) => {
-    const file = ev.target.files?.[0];
-    if (!file) return;
+    const files = ev.target.files;
+    if (!files || !files.length) return;
+  
     try {
-      const text = await file.text();
-      const arr = JSON.parse(text);
-      if (!Array.isArray(arr)) throw new Error('JSONは配列である必要があります');
-      await idbBulkPut(arr);
-      const all = await idbGetAll();
-      DATA = all;                       // ← window.DATA じゃなく DATA に代入
-      alert(`取り込み完了：${arr.length}件（DB合計：${all.length}件）`);
-      render();                         // ★ これを必ず呼ぶ
+      const result = await importJsonFiles(files);
+      if (result) {
+        alert(`取り込み完了：${result.imported}件（${result.files}ファイル）`);
+        render();
+      }
     } catch (e) {
       alert('取り込み失敗：' + e.message);
     } finally {
@@ -1112,18 +1769,17 @@
     }
   });
 
-  // ===== JSON書き出し =====
   document.getElementById('exportJson')?.addEventListener('click', async () => {
     const all = await idbGetAll();
     const blob = new Blob([JSON.stringify(all, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url; a.download = 'cards-export.json';
+    a.href = url;
+    a.download = makeExportFilename();
     a.click();
     URL.revokeObjectURL(url);
   });
 
-  // ===== DB全消去（カードのみ。SRSは別） =====
   document.getElementById('clearDb')?.addEventListener('click', async () => {
     if (!confirm('カードDBを全消去します。よろしいですか？')) return;
     await idbClear();
@@ -1131,11 +1787,10 @@
     alert('DBを空にしました。');
   });
 
-  // ===== 起動シーケンス：DB読み込み後に最初の描画へ =====
   (async () => {
     try {
       await bootDataFromIDB();
-      render();               // ★ ここで初回描画
+      render();
     } catch(e) { console.error('[boot] failed:', e); }
   })();
   </script>
