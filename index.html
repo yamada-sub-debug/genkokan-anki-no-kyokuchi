@@ -202,6 +202,7 @@
       user-select: none;
       -webkit-tap-highlight-color: transparent;
     }
+
     #settings-btn:hover {
       opacity: 0.8;
     }
@@ -346,6 +347,37 @@
         [arr[i], arr[j]] = [arr[j], arr[i]];
       }
       return arr;
+    }
+
+    function naturalCompare(a, b) {
+      const ax = [];
+      const bx = [];
+
+      a.replace(/(\d+)|(\D+)/g, (_, $1, $2) => {
+        ax.push([$1 || "", $2 || ""]);
+      });
+      b.replace(/(\d+)|(\D+)/g, (_, $1, $2) => {
+        bx.push([$1 || "", $2 || ""]);
+      });
+
+      while (ax.length && bx.length) {
+        const an = ax.shift();
+        const bn = bx.shift();
+
+        const numA = parseInt(an[0], 10);
+        const numB = parseInt(bn[0], 10);
+        const aIsNum = !isNaN(numA);
+        const bIsNum = !isNaN(numB);
+
+        if (aIsNum && bIsNum) {
+          if (numA !== numB) return numA - numB;
+        } else {
+          const c = an[1].localeCompare(bn[1], 'ja');
+          if (c !== 0) return c;
+        }
+      }
+
+      return ax.length - bx.length;
     }
 
     function startQuiz(unitKey = null) {
@@ -585,59 +617,61 @@
 
     function renderUnitList() {
       const subject = state.subject;
-      const items = state.subject === 'home'
-      ? []
-      : DATA.filter(x => x.教材 === subject);
-  
+
+      const items = subject === 'home'
+        ? []
+        : DATA.filter(x => x.教材 === subject);
+
       const unitMap = new Map();
       for (const it of items) {
-      const key = String(it.単元);
-      unitMap.set(key, (unitMap.get(key) || 0) + 1);
+        const key = String(it.単元);
+        unitMap.set(key, (unitMap.get(key) || 0) + 1);
       }
+
       const units = Array.from(unitMap.entries())
-      .sort((a, b) => a[0].localeCompare(b[0], 'ja'));
+        .sort((a, b) => naturalCompare(a[0], b[0]));
 
       const hasUnits = units.length > 0;
       const srs = lsLoad();
 
-        const listHtml = hasUnits
-          ? units.map(([u, c]) => {
-              const id  = unitId(subject, u);
-              const rec = srs[id];
-              return unitCardHTML(subject, u, c, rec, false, true);
+      const listHtml = hasUnits
+        ? units.map(([u, c]) => {
+            const id  = unitId(subject, u);
+            const rec = srs[id];
+            return unitCardHTML(subject, u, c, rec, false, true);
           }).join('')
         : `
           <div class="empty" style="padding:16px 0;">
-          <h2>${escapeHtml(subject)}</h2>
-          <p>この科目のデータが見つかりません。</p>
+            <h2>${escapeHtml(subject)}</h2>
+            <p>この科目のデータが見つかりません。</p>
           </div>
         `;
 
-    stage.innerHTML = `
+      stage.innerHTML = `
         <div style="width:100%; max-width:720px; display:grid; gap:12px;">
-        <div style="display:flex; justify-content:space-between; align-items:end; gap:10px;">
+          <div style="display:flex; justify-content:space-between; align-items:end; gap:10px;">
             <div>
-            <h2 style="margin:0; font-size:20px;">${escapeHtml(state.subject)}</h2>
+              <h2 style="margin:0; font-size:20px;">${escapeHtml(subject)}</h2>
             </div>
             <div style="display:flex; gap:8px;">
-            <button class="pill" id="addUnit">＋</button>
+              <button class="pill" id="addUnit">＋</button>
             </div>
-        </div>
-        ${listHtml}
+          </div>
+          ${listHtml}
         </div>
       `;
 
       document.getElementById('addUnit').addEventListener('click', () => {
-        renderUnitCreator(state.subject);
+        renderUnitCreator(subject);
       });
 
       if (hasUnits) {
         stage.querySelectorAll('button[data-due-start]').forEach(btn => {
           btn.addEventListener('click', () => {
             const id = btn.getAttribute('data-due-start');
-            const [subject, unit] = id.split('|||');
+            const [subj, unit] = id.split('|||');
 
-            state.subject = subject;
+            state.subject = subj;
             state.unit = unit === 'ALL' ? null : unit;
             state.mode = 'idle';
             startQuiz(state.unit);
@@ -646,8 +680,8 @@
 
         stage.querySelectorAll('button[data-unit-list]').forEach(btn => {
           btn.addEventListener('click', () => {
-          const unit = btn.getAttribute('data-unit-list');
-            renderProblemList(state.subject, unit);
+            const unit = btn.getAttribute('data-unit-list');
+            renderProblemList(subject, unit);
           });
         });
       }
@@ -965,7 +999,7 @@
     }
 
     function renderProblemEditor(subject, unit, id) {
-    const baseSubject = String(subject);  // 国語はそのまま
+    const baseSubject = String(subject);
     const isNew = (id == null);
 
     let row;
@@ -990,7 +1024,7 @@
     }
 
     const f = row.fields || {};
-    const labels = getLabelsForSubject(subject); // ['読み','意味'] など
+    const labels = getLabelsForSubject(subject);
 
     stage.innerHTML = `
         <div style="width:100%; max-width:720px; margin:auto; display:grid; gap:12px;">
@@ -1268,7 +1302,7 @@
       const min = pad(d.getMinutes());
       const s = pad(d.getSeconds());
 
-      return `export-${y}-${m}-${day}_${h}-${min}-${s}.json`;
+      return `genkokan-export-${y}-${m}-${day}_${h}-${min}-${s}.json`;
     }
 
     function renderSettings() {
