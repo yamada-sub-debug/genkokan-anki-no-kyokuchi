@@ -214,17 +214,34 @@
       }
     }
 
+    .site-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .site-link:hover {
+      opacity: .85;
+    }
+
   </style>
 </head>
 <body>
   <header>
     <div class="container">
       <div class="brand">
-        <div class="logo">🍂</div>
-        <div style="flex:1;">
+        <a
+          class="site-link"
+          href="https://yamada-sub-debug.github.io/eigo-anki-no-shinzui/"
+        >
+          <div class="logo">🍂</div>
           <h1>現古漢暗記の極致</h1>
-        </div>
-      <button id="settings-btn" aria-label="設定">🛠️</button>
+        </a>
+
+        <div style="flex:1;"></div>
+        <button id="settings-btn" aria-label="設定">🛠️</button>
       </div>
 
       <nav class="tray" id="subjectTray" aria-label="科目ナビゲーション">
